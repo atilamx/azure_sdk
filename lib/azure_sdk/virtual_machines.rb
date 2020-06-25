@@ -1,11 +1,17 @@
 require 'azure_sdk/setup_account'
-byebug
+require 'azure_sdk/request'
+
 module AzureSdk 
-  class VirtualMachines 
-    include AzureSdk::SetupAccount 
- 
+  class VirtualMachines
+
     def test
+    end
+
+    def get_virtual_machines
+      AzureSdk::Request.some_method
+      puts AzureSdk::Request.aqui
+
       puts "ok"
-    end 
+    end
   end
 end

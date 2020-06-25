@@ -7,8 +7,8 @@ require 'azure_sdk'
 
 class Raz 
   def start
-    a = AzureSdk::VirtualMachines.new 
-    a.test 
+    #a = AzureSdk::VirtualMachines.new 
+    #a.test
   end
 
   def start_logger
