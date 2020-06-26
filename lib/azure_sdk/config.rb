@@ -2,32 +2,36 @@ module AzureSdk
   module Config
     extend self
 
-    attr_accessor :block_connection
+    attr_accessor :tenant
 
-    def self.basic_test
-      5
-    end
+    attr_accessor :appId
+
+    attr_accessor :password
 
     def self.parse_configuration(file)
-      credentials = file.read
-      extract_keys(credentials.split("\n"))
+      @credentials = file.read
+      extract_keys
     end
 
-    def self.extract_keys(keys)
-      needed_keys = ["tenant", "appId", "password"]
+    def self.extract_keys
+      keys = @credentials.split("\n")
+
       puts "Extracting keys.."
 
-      keys.each do |k|
-        next if k.match?(/Azure-Accuount/)
+      set_values(keys)
+    end
 
-        begin
-          needed_keys.each do |needed_key|
-            raise "The following key values is missing #{needed_key}" unless keys.match?(/"#{needed_key}"/)
-          end
-        rescue StandardError => e
-          e.message
-          exit
-        end
+    private
+
+    def self.set_values(keys)
+      keys.each do |key|
+        next if key.match?(/Azure-Account/)
+        raise StandardError.new "The following key values are malformed :\'#{key}\'" unless key.match?(/[a-zA-Z].*(\s?|\s+)=(\s?|\s+)\S+/)
+
+        key_temp = key.split("=").first.delete(' ')
+        value = key.split("=").last.delete(' ')
+
+        self.send("#{key_temp}=",value) #Fill the attributes automatically
       end
     end
   end
