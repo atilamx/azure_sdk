@@ -14,24 +14,24 @@ module AzureSdk
     end
 
     def self.extract_keys
-      keys = @credentials.split("\n")
+      tmp_credentials = @credentials.split("\n")
 
-      puts "Extracting keys.."
+      STDERR.puts "Extracting keys.."
 
-      set_values(keys)
+      set_values(tmp_credentials)
     end
 
     private
 
-    def self.set_values(keys)
-      keys.each do |key|
-        next if key.match?(/Azure-Account/)
-        raise StandardError.new "The following key values are malformed :\'#{key}\'" unless key.match?(/[a-zA-Z].*(\s?|\s+)=(\s?|\s+)\S+/)
+    def self.set_values(tmp_credentials)
+      tmp_credentials.each do |credential|
+        next if credential.match?(/Azure-Account/)
+        raise StandardError.new "The following credential is malformed :\'#{credential}\'" unless credential.match?(/[a-zA-Z].*(\s?|\s+)=(\s?|\s+)\S+/)
 
-        key_temp = key.split("=").first.delete(' ')
-        value = key.split("=").last.delete(' ')
+        key = credential.split("=").first.delete(' ')
+        value = credential.split("=").last.delete(' ')
 
-        self.send("#{key_temp}=",value) #Fill the attributes automatically
+        self.send("#{key}=",value) #Fill the attributes automatically
       end
     end
   end
