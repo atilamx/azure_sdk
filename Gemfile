@@ -16,7 +16,7 @@ group :development, :test do
 
   if Gem.ruby_version >= Gem::Version.new("1.9.0")
     gem "faraday", ">= 0.9"
-    gem "dalli", "~> 2.0"
+    gem "dalli", "~> 3.2"
   end
 
   gem "redis", "~> 3.0"
